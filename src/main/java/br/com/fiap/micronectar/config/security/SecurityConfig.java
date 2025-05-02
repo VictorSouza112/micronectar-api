@@ -32,28 +32,23 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-    @Bean // Expõe o SecurityFilterChain como um Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                // 1. Desabilitar CSRF (Cross-Site Request Forgery), pois usaremos autenticação stateless (JWT)
                 .csrf(csrf -> csrf.disable())
-
-                // 2. Configurar o gerenciamento de sessão como STATELESS
-                // A aplicação não criará nem usará sessões HTTP; cada requisição deve ser auto-contida (com token)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // 3. Configurar regras de autorização para as requisições HTTP
                 .authorizeHttpRequests(authorize -> authorize
-                        // Permite acesso público (sem autenticação) para requisições POST em /api/auth/login
+                        // Endpoints Públicos
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        // Permite acesso público para POST em /api/auth/register/microempreendedor (e futuros /cliente, /investidor)
                         .requestMatchers(HttpMethod.POST, "/api/auth/register/**").permitAll()
-                        // Qualquer outra requisição (anyRequest) deve ser autenticada (authenticated)
+                        // Endpoint de Adicionar Produtos
+                        .requestMatchers(HttpMethod.POST, "/api/microempreendedores/*/produtos").hasAnyRole("MICROEMPREENDEDOR", "ADMIN")
+
+                        // Regra Geral: Qualquer outra requisição exige autenticação
                         .anyRequest().authenticated()
                 )
-
-                // 4. Constrói e retorna o SecurityFilterChain
                 .addFilterBefore(verificarToken, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
 }

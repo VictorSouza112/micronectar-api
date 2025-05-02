@@ -44,13 +44,6 @@ public class TokenService {
         }
     }
 
-    /**
-     * Valida um token JWT recebido.
-     * Verifica a assinatura, o emissor e a data de expiração.
-     *
-     * @param tokenJWT A String do token JWT recebida no cabeçalho Authorization.
-     * @return O subject (email do usuário) se o token for válido, ou null (ou string vazia) se inválido.
-     */
     public String validarToken(String tokenJWT) {
         try {
             // Define o mesmo algoritmo de assinatura usado na geração
@@ -69,10 +62,6 @@ public class TokenService {
         }
     }
 
-    /**
-     * Calcula a data/hora de expiração do token.
-     * @return Um Instant representando o momento da expiração (ex: 2 horas a partir de agora).
-     */
     private Instant gerarDataDeExpiracao() {
         // Define a expiração para 2 horas a partir do momento atual
         // Usa o fuso horário de São Paulo (-03:00) como referência
