@@ -16,7 +16,7 @@ CREATE SEQUENCE SEQ_MNT_USUARIO START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
 CREATE TABLE TBL_MNT_USUARIOS (
                                   id_usuario   NUMBER NOT NULL PRIMARY KEY, -- PK definida, mas não ligada à sequence aqui explicitamente no DDL padrão
                                   nome         VARCHAR2(150) NOT NULL,
-                                  email        VARCHAR2(100) NOT NULL UNIQUE,
+                                  email        VARCHAR2(100) NOT NULL,
                                   senha        VARCHAR2(100) NOT NULL, -- Será hash no futuro
                                   tipo_usuario VARCHAR2(20) NOT NULL,  -- 'CLIENTE', 'INVESTIDOR', 'MICROEMPREENDEDOR'
                                   dt_cadastro  DATE DEFAULT sysdate,

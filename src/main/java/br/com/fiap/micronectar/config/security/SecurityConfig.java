@@ -47,7 +47,7 @@ public class SecurityConfig {
                         // Permite acesso público (sem autenticação) para requisições POST em /api/auth/login
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         // Permite acesso público para POST em /api/auth/register/microempreendedor (e futuros /cliente, /investidor)
-                        .requestMatchers(HttpMethod.POST, "/api/auth/register/**").hasAnyRole("MICROEMPREENDEDOR", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register/**").permitAll()
                         // Qualquer outra requisição (anyRequest) deve ser autenticada (authenticated)
                         .anyRequest().authenticated()
                 )
