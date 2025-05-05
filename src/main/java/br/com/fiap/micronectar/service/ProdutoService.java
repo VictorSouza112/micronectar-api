@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails; // Importar UserDetails
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 @Service
 public class ProdutoService {
@@ -63,4 +64,22 @@ public class ProdutoService {
         // 6. Retornar o DTO de exibição
         return new ProdutoExibicaoDTO(produtoSalvo);
     }
+
+    // Listar Produtos por Microempreendedor
+    public List<ProdutoExibicaoDTO> listarProdutosPorMicroempreendedor(Long microempreendedorId) {
+
+        // 1. Verificar se o Microempreendedor existe
+        if (!microempreendedorRepository.existsById(microempreendedorId)) {
+            throw new MicroempreendedorNotFoundException("Microempreendedor não encontrado com ID: " + microempreendedorId);
+        }
+
+        // 2. Buscar os produtos associados usando o método do repositório
+        List<Produto> produtos = produtoRepository.findByMicroempreendedorIdUsuario(microempreendedorId);
+
+        // 3. Converter a lista de entidades Produto para uma lista de ProdutoExibicaoDTO
+        return produtos.stream()                 // Cria um stream da lista de produtos
+                .map(ProdutoExibicaoDTO::new) // Para cada produto, cria um novo DTO usando o construtor
+                .toList();                     // Coleta os DTOs em uma nova lista (Java 16+)
+    }
+
 }
