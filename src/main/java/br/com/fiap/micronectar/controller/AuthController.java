@@ -34,7 +34,7 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
-    // --- Endpoint de Registro de Microempreendedor (existente) ---
+    // --- Endpoint de Registro de Microempreendedor ---
     @PostMapping("/register/microempreendedor")
     public ResponseEntity<MicroempreendedorExibicaoDTO> registrarMicroempreendedor(
             @Valid @RequestBody MicroempreendedorCadastroDTO microempreendedorCadastroDTO
