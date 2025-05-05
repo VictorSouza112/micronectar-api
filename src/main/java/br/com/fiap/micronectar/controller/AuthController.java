@@ -54,6 +54,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
     }
 
+    // --- Endpoint de Registro de Investidor ---
     @PostMapping("/register/investidor")
     public ResponseEntity<InvestidorExibicaoDTO> registrarInvestidor(
             @Valid @RequestBody InvestidorCadastroDTO investidorCadastroDTO
@@ -65,14 +66,21 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(investidorSalvo);
     }
 
-    // --- Endpoint de Login (existente) ---
+    // --- Endpoint de Login ---
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> login(@RequestBody @Valid LoginDTO loginDto) {
+        // 1. Cria o objeto de autenticação com as credenciais do DTO
         UsernamePasswordAuthenticationToken usernamePassword =
                 new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.senha());
+
+        // 2. Autentica usando o AuthenticationManager
         Authentication auth = authenticationManager.authenticate(usernamePassword);
+
+        // 3. Se a autenticação foi bem-sucedida, gera o token JWT
         Usuario usuarioAutenticado = (Usuario) auth.getPrincipal();
         String tokenJwt = tokenService.gerarToken(usuarioAutenticado);
+
+        // 4. Retorna o token JWT dentro de um TokenDTO na resposta 200 OK
         return ResponseEntity.ok(new TokenDTO(tokenJwt));
     }
 }
