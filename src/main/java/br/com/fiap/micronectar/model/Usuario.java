@@ -56,11 +56,18 @@ public class Usuario implements UserDetails { // Implementa UserDetails
     @ToString.Exclude // Evita recursão no toString()
     private Microempreendedor microempreendedor;
 
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    @ToString.Exclude // Evita recursão
+    private Cliente cliente;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    @ToString.Exclude // Evita recursão no toString()
+    private Investidor investidor;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role.getRole()));
     }
-
     @Override
     public String getPassword() {
         return this.senha; // Retorna a senha (criptografada posteriormente)

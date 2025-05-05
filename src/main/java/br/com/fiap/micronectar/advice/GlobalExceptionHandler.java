@@ -1,10 +1,8 @@
 package br.com.fiap.micronectar.advice;
 
-import br.com.fiap.micronectar.exception.AcessoNegadoException; // Importar
-import br.com.fiap.micronectar.exception.CnpjJaCadastradoException;
-import br.com.fiap.micronectar.exception.EmailJaCadastradoException;
-import br.com.fiap.micronectar.exception.MicroempreendedorNotFoundException; // Importar
-import org.springframework.dao.DataIntegrityViolationException; // Importar para tratar erros UNIQUE do banco
+import br.com.fiap.micronectar.exception.*;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -20,7 +18,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Handler para Bean Validation
+    // Handler para erros de validação (@Valid) - existente
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -30,7 +28,7 @@ public class GlobalExceptionHandler {
         return errors;
     }
 
-    // Handler para Email Duplicado
+    // Handler para Email duplicado - existente
     @ExceptionHandler(EmailJaCadastradoException.class)
     public ResponseEntity<Map<String, String>> handleEmailJaCadastradoException(EmailJaCadastradoException ex) {
         Map<String, String> errorBody = new HashMap<>();
@@ -38,7 +36,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
     }
 
-    // Handler para CNPJ Duplicado
+    // Handler para CNPJ duplicado - existente
     @ExceptionHandler(CnpjJaCadastradoException.class)
     public ResponseEntity<Map<String, String>> handleCnpjJaCadastradoException(CnpjJaCadastradoException ex) {
         Map<String, String> errorBody = new HashMap<>();
@@ -46,21 +44,55 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
     }
 
-    // Handler para Microempreendedor Não Encontrado
-    @ExceptionHandler(MicroempreendedorNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleMicroempreendedorNotFoundException(MicroempreendedorNotFoundException ex) {
+    // --- Handler para CPF duplicado ---
+    @ExceptionHandler(CpfJaCadastradoException.class)
+    public ResponseEntity<Map<String, String>> handleCpfJaCadastradoException(CpfJaCadastradoException ex) {
+        Map<String, String> errorBody = new HashMap<>();
+        errorBody.put("erro", ex.getMessage()); // Adiciona a mensagem específica do CPF
+        // Retorna ResponseEntity com o corpo e o status 409 Conflict
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
+    }
+
+    @ExceptionHandler(DocumentoJaCadastradoException.class)
+    public ResponseEntity<Map<String, String>> handleDocumentoJaCadastradoException(DocumentoJaCadastradoException ex) {
+        Map<String, String> errorBody = new HashMap<>();
+        errorBody.put("erro", ex.getMessage()); // Pega a mensagem da exceção
+        // Retorna ResponseEntity com o corpo e o status 409 Conflict
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
+    }
+
+    // --- Handler para VotoDuplicadoException ---
+    @ExceptionHandler(VotoDuplicadoException.class)
+    public ResponseEntity<Map<String, String>> handleVotoDuplicadoException(VotoDuplicadoException ex) {
         Map<String, String> errorBody = new HashMap<>();
         errorBody.put("erro", ex.getMessage());
-        // Retorna 404 Not Found
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
+    }
+
+    // --- Handler para VotoInvalidoException ---
+    @ExceptionHandler(VotoInvalidoException.class)
+    public ResponseEntity<Map<String, String>> handleVotoInvalidoException(VotoInvalidoException ex) {
+        Map<String, String> errorBody = new HashMap<>();
+        errorBody.put("erro", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorBody);
+    }
+
+    // --- Handler para EntityNotFoundException ---
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleEntityNotFoundException(EntityNotFoundException ex) {
+        Map<String, String> errorBody = new HashMap<>();
+        errorBody.put("erro", ex.getMessage()); // A mensagem geralmente já diz qual entidade não foi encontrada
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
     }
 
-    // Handler para Acesso Negado (Regra de Negócio)
-    @ExceptionHandler(AcessoNegadoException.class)
-    public ResponseEntity<Map<String, String>> handleAcessoNegadoException(AcessoNegadoException ex) {
+    // --- Handler para DataIntegrityViolationException ---
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, String>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         Map<String, String> errorBody = new HashMap<>();
-        errorBody.put("erro", ex.getMessage());
-        // Retorna 403 Forbidden
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorBody);
+        // Mensagem genérica, pois pode haver várias causas. Poderia analisar ex.getMessage() para mais detalhes.
+        errorBody.put("erro", "Violação de integridade de dados. Verifique se o recurso já existe ou se os dados são válidos.");
+        // Logar a exceção original é importante para debug no servidor
+        // log.error("DataIntegrityViolationException: ", ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
     }
 }
