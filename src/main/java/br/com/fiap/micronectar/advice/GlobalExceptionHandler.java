@@ -18,7 +18,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Handler para erros de validação (@Valid) - existente
+    // Handler para Bean Validation
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
         return errors;
     }
 
-    // Handler para Email duplicado - existente
+    // Handler para Email Duplicado
     @ExceptionHandler(EmailJaCadastradoException.class)
     public ResponseEntity<Map<String, String>> handleEmailJaCadastradoException(EmailJaCadastradoException ex) {
         Map<String, String> errorBody = new HashMap<>();
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
     }
 
-    // Handler para CNPJ duplicado - existente
+    // Handler para CNPJ Duplicado
     @ExceptionHandler(CnpjJaCadastradoException.class)
     public ResponseEntity<Map<String, String>> handleCnpjJaCadastradoException(CnpjJaCadastradoException ex) {
         Map<String, String> errorBody = new HashMap<>();
@@ -44,7 +44,25 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
     }
 
-    // --- Handler para CPF duplicado ---
+    // Handler para Microempreendedor Não Encontrado
+    @ExceptionHandler(MicroempreendedorNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleMicroempreendedorNotFoundException(MicroempreendedorNotFoundException ex) {
+        Map<String, String> errorBody = new HashMap<>();
+        errorBody.put("erro", ex.getMessage());
+        // Retorna 404 Not Found
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
+    }
+
+    // Handler para Acesso Negado (Regra de Negócio)
+    @ExceptionHandler(AcessoNegadoException.class)
+    public ResponseEntity<Map<String, String>> handleAcessoNegadoException(AcessoNegadoException ex) {
+        Map<String, String> errorBody = new HashMap<>();
+        errorBody.put("erro", ex.getMessage());
+        // Retorna 403 Forbidden
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorBody);
+    }
+
+        // --- Handler para CPF duplicado ---
     @ExceptionHandler(CpfJaCadastradoException.class)
     public ResponseEntity<Map<String, String>> handleCpfJaCadastradoException(CpfJaCadastradoException ex) {
         Map<String, String> errorBody = new HashMap<>();
