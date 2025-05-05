@@ -43,7 +43,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/register/**").permitAll()
                         // Endpoint de Adicionar Produtos
                         .requestMatchers(HttpMethod.POST, "/api/microempreendedores/*/produtos").hasAnyRole("MICROEMPREENDEDOR", "ADMIN")
-
+                        // Permite POST em /api/microempreendedores/{id}/votos apenas para CLIENTE, INVESTIDOR ou ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/microempreendedores/*/votos").hasAnyRole("CLIENTE", "INVESTIDOR", "ADMIN")
                         // Regra Geral: Qualquer outra requisição exige autenticação
                         .anyRequest().authenticated()
                 )
