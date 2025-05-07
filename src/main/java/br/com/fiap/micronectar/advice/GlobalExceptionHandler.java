@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorBody);
     }
 
-        // --- Handler para CPF duplicado ---
+    // --- Handler para CPF duplicado ---
     @ExceptionHandler(CpfJaCadastradoException.class)
     public ResponseEntity<Map<String, String>> handleCpfJaCadastradoException(CpfJaCadastradoException ex) {
         Map<String, String> errorBody = new HashMap<>();
