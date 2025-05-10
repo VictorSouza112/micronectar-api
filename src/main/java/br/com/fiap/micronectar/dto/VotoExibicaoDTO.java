@@ -9,7 +9,6 @@ public record VotoExibicaoDTO(
         Long idVotador,
         // String nomeVotador, // Poderíamos adicionar se quiséssemos, mas complica o construtor
         Long idMicroempreendedor,
-        LocalDateTime dtVotacao,
         Boolean promissor,
         String comentario
 ) {
@@ -20,7 +19,6 @@ public record VotoExibicaoDTO(
                 votacao.getIdVotacao(),
                 votacao.getVotador().getIdUsuario(), // Pega o ID do Usuario votador associado
                 votacao.getMicroempreendedorVotado().getIdUsuario(), // Pega o ID do ME votado associado
-                votacao.getDtVotacao(),
                 votacao.getPromissor(),
                 votacao.getComentario()
         );

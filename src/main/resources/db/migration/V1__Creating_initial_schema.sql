@@ -19,7 +19,6 @@ CREATE TABLE TBL_MNT_USUARIOS (
                                   email        VARCHAR2(100) NOT NULL,
                                   senha        VARCHAR2(100) NOT NULL, -- Será hash no futuro
                                   tipo_usuario VARCHAR2(20) NOT NULL,  -- 'CLIENTE', 'INVESTIDOR', 'MICROEMPREENDEDOR'
-                                  dt_cadastro  DATE DEFAULT sysdate,
                                   CONSTRAINT ck_usuario_tipo CHECK (tipo_usuario IN ('CLIENTE', 'INVESTIDOR', 'MICROEMPREENDEDOR'))
 );
 COMMENT ON TABLE TBL_MNT_USUARIOS IS 'Tabela central de usuários da plataforma Micronectar.';

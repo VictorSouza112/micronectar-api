@@ -54,7 +54,6 @@ CREATE TABLE TBL_MNT_VOTACOES (
                                   id_votacao           NUMBER NOT NULL PRIMARY KEY,
                                   id_votador_usuario   NUMBER NOT NULL,
                                   id_microempreendedor NUMBER NOT NULL,
-                                  dt_votacao           DATE DEFAULT sysdate,
                                   fl_promissor         VARCHAR2(1) DEFAULT 'N' NOT NULL,
                                   ds_comentario        VARCHAR2(500),
                                   CONSTRAINT fk_votacao_votador FOREIGN KEY (id_votador_usuario) REFERENCES TBL_MNT_USUARIOS (id_usuario) ON DELETE CASCADE,

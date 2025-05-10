@@ -48,10 +48,6 @@ public class Usuario implements UserDetails { // Implementa UserDetails
     @Column(name = "role", length = 30, nullable = false) // Mapeia para a coluna ROLE
     private UsuarioRole role; // Atributo do tipo enum UsuarioRole
 
-    @CreationTimestamp // Preenche automaticamente com a data/hora da criação
-    @Column(name = "dt_cadastro", updatable = false) // Mapeia para dt_cadastro, não atualizável
-    private LocalDateTime dtCadastro; // Usando LocalDateTime para precisão de data e hora
-
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     @ToString.Exclude // Evita recursão no toString()
     private Microempreendedor microempreendedor;

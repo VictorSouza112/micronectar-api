@@ -12,7 +12,6 @@ public record InvestidorExibicaoDTO(
         String nome,
         String email,
         TipoUsuario tipoUsuario,
-        LocalDateTime dtCadastro,
 
         // Campos do Investidor
         String nrDocumento,
@@ -27,7 +26,6 @@ public record InvestidorExibicaoDTO(
                 investidor.getUsuario().getNome(),
                 investidor.getUsuario().getEmail(),
                 investidor.getUsuario().getTipoUsuario(),
-                investidor.getUsuario().getDtCadastro(),
                 investidor.getNrDocumento(),
                 investidor.getDsPerfilInvestidor(),
                 investidor.getDtNascimento()

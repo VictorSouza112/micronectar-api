@@ -37,10 +37,6 @@ public class Votacao {
     @JoinColumn(name = "id_microempreendedor", nullable = false)
     private Microempreendedor microempreendedorVotado;
 
-    @CreationTimestamp
-    @Column(name = "dt_votacao", nullable = false, updatable = false)
-    private LocalDateTime dtVotacao;
-
     @Convert(converter = BooleanToStringSNConverter.class) // Aplica o conversor customizado
     @Column(name = "fl_promissor", length = 1, nullable = false)
     private Boolean promissor = false; // O tipo Java continua Boolean!

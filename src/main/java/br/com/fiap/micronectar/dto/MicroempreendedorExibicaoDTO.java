@@ -11,7 +11,6 @@ public record MicroempreendedorExibicaoDTO(
         String nomeFantasia, // Renomeado para clareza semântica neste DTO
         String email,
         TipoUsuario tipoUsuario,
-        LocalDateTime dtCadastro,
 
         // Campos específicos do Microempreendedor
         String nrCnpj
@@ -24,7 +23,6 @@ public record MicroempreendedorExibicaoDTO(
                 microempreendedor.getUsuario().getNome(), // Pega o nome fantasia do Usuario associado
                 microempreendedor.getUsuario().getEmail(),
                 microempreendedor.getUsuario().getTipoUsuario(),
-                microempreendedor.getUsuario().getDtCadastro(),
                 microempreendedor.getNrCnpj() // Pega o CNPJ do Microempreendedor
         );
     }

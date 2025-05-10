@@ -77,7 +77,6 @@ public class ClienteService {
                 usuarioCompleto.getNome(),
                 usuarioCompleto.getEmail(),
                 usuarioCompleto.getTipoUsuario(),
-                usuarioCompleto.getDtCadastro(), // <-- Agora deve ter o valor correto
                 clienteCompleto.getNrCpf(),
                 clienteCompleto.getDtNascimento()
         );

@@ -9,8 +9,7 @@ public record UsuarioExibicaoDTO(
         Long idUsuario,
         String nome, // Nome do usuário ou nome fantasia da empresa
         String email,
-        TipoUsuario tipoUsuario,
-        LocalDateTime dtCadastro
+        TipoUsuario tipoUsuario
 ) {
 
     // Construtor que recebe a entidade Usuario genérica
@@ -19,8 +18,7 @@ public record UsuarioExibicaoDTO(
                 usuario.getIdUsuario(),
                 usuario.getNome(),
                 usuario.getEmail(),
-                usuario.getTipoUsuario(),
-                usuario.getDtCadastro()
+                usuario.getTipoUsuario()
         );
     }
 }

@@ -12,7 +12,6 @@ public record ClienteExibicaoDTO(
         String nome,
         String email,
         TipoUsuario tipoUsuario,
-        LocalDateTime dtCadastro,
 
         // Campos específicos do Cliente
         String nrCpf,
@@ -25,7 +24,6 @@ public record ClienteExibicaoDTO(
                 cliente.getUsuario().getNome(), // Pega nome do Usuario associado
                 cliente.getUsuario().getEmail(), // Pega email do Usuario associado
                 cliente.getUsuario().getTipoUsuario(), // Pega tipo do Usuario associado
-                cliente.getUsuario().getDtCadastro(), // Pega data cadastro do Usuario associado
                 cliente.getNrCpf(), // Pega CPF do Cliente
                 cliente.getDtNascimento() // Pega data nascimento do Cliente
         );
