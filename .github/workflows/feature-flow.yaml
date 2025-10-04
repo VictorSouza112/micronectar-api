@@ -1,0 +1,26 @@
+name: Feature FLow
+
+on:
+  push:
+    branches:
+      - feature/**
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: craeting pull request"
+          title: 'feat: ${{ github.ref_name }}'
+          body: |
+            Pull Request automático da branch `${{ github.ref_name }}`.
+            **Autor:** @${{ github.actor }}
+            Por favor, revise as alterações e faça o merge para `develop`.
+            branch: ${{ github.ref }}
+            base: develop
+            
