@@ -8,8 +8,11 @@ jobs:
   create-pull-request:
     runs-on: ubuntu-latest
     steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: craeting pull request"
@@ -17,5 +20,7 @@ jobs:
           body: |
             Pull Request automático da branch `${{ github.ref_name }}`.
             **Autor:** @${{ github.actor }}
-            Por favor, revise as alterações e realize o merge.
+            Por favor, revise as alterações e faça o merge para develop.
             branch: ${{ github.ref }}
+            base: develop
+            
