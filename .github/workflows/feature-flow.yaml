@@ -20,6 +20,7 @@ jobs:
           body: |
             Pull Request automático da branch `${{ github.ref_name }}`.
             Por favor, revise as alterações e faça o merge para develop.
+          branch: ${{ github.ref_name }}
           base: develop
             
             
