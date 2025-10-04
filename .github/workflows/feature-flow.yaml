@@ -15,12 +15,12 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: craeting pull request"
-          title: 'feat: ${{ github.ref_name }}'
+          commit-message: "Criando Pull REquest"
+          author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
+          branch: example/patch
+          title: 'Feature: ${{ github.ref_name }}'
           body: |
             Pull Request automático da branch `${{ github.ref_name }}`.
-            **Autor:** @${{ github.actor }}
             Por favor, revise as alterações e faça o merge para develop.
-            branch: ${{ github.ref }}
-            base: develop
+            
             
