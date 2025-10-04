@@ -1,18 +1,42 @@
-# 1. Imagem Base: Usa uma imagem OpenJDK 21 sobre Alpine Linux
+# =============================================================================
+# ESTÁGIO 1: Build da Aplicação com Maven e JDK 21
+# =============================================================================
+# Usamos a imagem oficial do Maven com o Temurin JDK 21.
+# O alias 'AS build' nomeia este estágio para referência futura.
+FROM maven:3.9.8-eclipse-temurin-21 AS build
+
+# Define o diretório de trabalho dentro do contêiner.
+WORKDIR /app
+
+# Otimização de cache do Docker:
+# Copia primeiro o pom.xml e baixa as dependências. A camada de dependências
+# só será invalidada se o pom.xml mudar, acelerando builds futuros.
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copia o restante do código-fonte da aplicação.
+COPY src ./src
+
+# Compila a aplicação, empacota em um .jar e pula os testes (pois
+# os testes serão executados em uma etapa separada no pipeline de CI).
+RUN mvn clean package -DskipTests
+
+# =============================================================================
+# ESTÁGIO 2: Criação da Imagem Final com JRE Mínimo
+# =============================================================================
+# Começamos com uma imagem base Alpine, que é extremamente leve e segura,
+# contendo apenas o Java Runtime Environment (JRE).
 FROM eclipse-temurin:21-jre-alpine
 
-# 2. Volume: Define um ponto de montagem para dados temporários (boa prática)
-VOLUME /tmp
+# Define o diretório de trabalho na imagem final.
+WORKDIR /app
 
-# 3. Expor Porta: Informa que a aplicação no contêiner ouvirá na porta 8080
+# Copia APENAS o .jar gerado no estágio 'build' para a imagem final.
+# O artefato é renomeado para 'app.jar' para simplificar o comando de execução.
+COPY --from=build /app/target/micronectar-api-0.0.1-SNAPSHOT.jar app.jar
+
+# Expõe a porta 8080, que é a porta padrão do Spring Boot.
 EXPOSE 8080
 
-# 4. Argumento para o JAR: Define uma variável para o caminho do JAR
-#    (ajuste o nome do JAR se for diferente)
-ARG JAR_FILE=target/micronectar-api-0.0.1-SNAPSHOT.jar
-
-# 5. Adicionar JAR: Copia o arquivo JAR do build para dentro da imagem como 'app.jar'
-ADD ${JAR_FILE} app.jar
-
-# 6. Ponto de Entrada: Define o comando para executar a aplicação quando o contêiner iniciar
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Define o comando que será executado quando o contêiner iniciar.
+ENTRYPOINT ["java", "-jar", "app.jar"]

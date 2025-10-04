@@ -1,0 +1,66 @@
+# Versão do Docker Compose. '3.8' é uma versão moderna e estável.
+version: '3.8'
+
+# Define a rede customizada para nossa aplicação.
+# Isso garante um melhor isolamento e permite que os serviços se encontrem pelo nome.
+networks:
+  micronectar-net:
+    driver: bridge
+
+# Define os volumes nomeados para persistência de dados.
+volumes:
+  db_data:
+    driver: local
+
+# Define os serviços (contêineres) que compõem a nossa aplicação.
+services:
+  # --------------------------------------------------------------------------
+  # Serviço do Banco de Dados Oracle
+  # --------------------------------------------------------------------------
+  db:
+    # Imagem do Oracle XE 21c, otimizada para startups rápidos.
+    image: gvenzl/oracle-xe:21-slim-faststart
+    container_name: micronectar-db
+    networks:
+      - micronectar-net
+    ports:
+      # Mapeia a porta 1521 do contêiner para a porta 1521 da sua máquina local,
+      # permitindo que você se conecte com o SQL Developer em localhost:1521.
+      - "1521:1521"
+    volumes:
+      # Monta o volume nomeado para persistir os dados do banco.
+      - db_data:/opt/oracle/oradata
+    environment:
+      # Define a senha para o usuário 'system'. DEVE ser a mesma usada pela API.
+      - ORACLE_PASSWORD=oracle
+    healthcheck:
+      # Comando para verificar se o banco de dados está pronto para aceitar conexões.
+      # Essencial para garantir que a API não tente conectar antes da hora.
+      test: [ "CMD-SHELL", "echo 'select 1 from dual;' | sqlplus -S system/oracle@//localhost:1521/XE" ]
+      interval: 60s
+      timeout: 40s
+      retries: 30
+      start_period: 300s
+
+  # --------------------------------------------------------------------------
+  # Serviço da API Micronectar
+  # --------------------------------------------------------------------------
+  api:
+    container_name: micronectar-api
+    networks:
+      - micronectar-net
+    # Constrói a imagem a partir do Dockerfile na pasta atual ('.').
+    build: .
+    ports:
+      # Mapeia a porta 8080 do contêiner para a porta 8080 da sua máquina.
+      - "8080:8080"
+    environment:
+      # Passa as variáveis de ambiente que o application.properties espera.
+      - DB_URL=jdbc:oracle:thin:@db:1521:XE
+      - DB_USERNAME=system
+      - DB_PASSWORD=oracle
+      - JWT_SECRET=bf7458ffe3ef48193acd8b686a7d37ca9befed868d31cfdb
+    depends_on:
+      db:
+        # Garante que a API só iniciará DEPOIS que o healthcheck do 'db' passar.
+        condition: service_healthy
