@@ -36,11 +36,11 @@ services:
     healthcheck:
       # Comando para verificar se o banco de dados está pronto para aceitar conexões.
       # Essencial para garantir que a API não tente conectar antes da hora.
-      test: [ "CMD-SHELL", "echo 'select 1 from dual;' | sqlplus -S system/oracle@//localhost:1521/XE" ]
-      interval: 60s
-      timeout: 40s
-      retries: 30
-      start_period: 300s
+      test: [ "CMD-SHELL", "echo 'select 1 from dual;' | sqlplus -S system/oracle@//localhost:1521/XEPDB1" ]
+      #interval: 15s
+      #timeout: 10s
+      #retries: 10
+      #start_period: 120s
 
   # --------------------------------------------------------------------------
   # Serviço da API Micronectar
@@ -56,7 +56,8 @@ services:
       - "8080:8080"
     environment:
       # Passa as variáveis de ambiente que o application.properties espera.
-      - DB_URL=jdbc:oracle:thin:@db:1521:XE
+      # TODO - Não deixar as credenciais públicas
+      - DB_URL=jdbc:oracle:thin:@//db:1521/XEPDB1
       - DB_USERNAME=system
       - DB_PASSWORD=oracle
       - JWT_SECRET=bf7458ffe3ef48193acd8b686a7d37ca9befed868d31cfdb
