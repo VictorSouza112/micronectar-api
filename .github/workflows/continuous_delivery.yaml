@@ -45,7 +45,7 @@ jobs:
         with:
           inlineScript: |
             az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-staging' --settings \
-              "WEBSITES_PORT=8080"
+              "WEBSITES_PORT=8080" \
               "SPRING_PROFILES_ACTIVE=staging" \
               "DB_URL=${{ secrets.DB_URL_STAGING }}" \
               "DB_USERNAME=${{ secrets.DB_USERNAME_STAGING }}" \
@@ -84,7 +84,7 @@ jobs:
         with:
           inlineScript: |
             az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-prod' --settings \
-              "WEBSITES_PORT=8080"
+              "WEBSITES_PORT=8080" \
               "SPRING_PROFILES_ACTIVE=production" \
               "DB_URL=${{ secrets.DB_URL_PROD }}" \
               "DB_USERNAME=${{ secrets.DB_USERNAME_PROD }}" \
