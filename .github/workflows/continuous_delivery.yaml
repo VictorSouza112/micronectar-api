@@ -64,7 +64,7 @@ jobs:
         with:
           inlineScript: |
             echo "Reiniciando o App Service de Staging para aplicar todas as mudanças..."
-            az webapp restart --resource-group rg-micronectar-devops --name 'app-micronectar-staging-vs'
+            az webapp restart --resource-group rg-micronectar-devops --name 'app-micronectar-staging'
 
   deploy-production:
     runs-on: ubuntu-latest
@@ -103,4 +103,4 @@ jobs:
         with:
           inlineScript: |
             echo "Reiniciando o App Service de Produção para aplicar todas as mudanças..."
-            az webapp restart --resource-group rg-micronectar-devops --name 'app-micronectar-prod-vs'
+            az webapp restart --resource-group rg-micronectar-devops --name 'app-micronectar-prod'
