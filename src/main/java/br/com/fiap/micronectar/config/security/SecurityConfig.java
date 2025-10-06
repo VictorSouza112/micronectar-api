@@ -38,9 +38,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        // --- NOVA REGRA DE PERMISSÃO ---
-                        // Permite acesso GET à raiz e ao index.html para qualquer um
-                        .requestMatchers(HttpMethod.GET, "/", "/index.html").permitAll()
+                        // Endpoints Públicos da Documentação Swagger/OpenAPI
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
 
                         // Endpoints Públicos de Autenticação e Registro
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()

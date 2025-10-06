@@ -44,7 +44,7 @@ jobs:
         uses: azure/cli@v1
         with:
           inlineScript: |
-            az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-staging' --settings \
+            az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-staging-vs' --settings \
               "WEBSITES_CONTAINER_START_TIME_LIMIT=600" \
               "WEBSITES_PORT=8080" \
               "SPRING_PROFILES_ACTIVE=staging" \
@@ -57,7 +57,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'app-micronectar-staging'
+          app-name: 'app-micronectar-staging-vs'
           images: '${{ secrets.DOCKERHUB_USERNAME }}/micronectar-api:${{ github.sha }}'
 
       - name: Restart Staging App Service
@@ -65,7 +65,7 @@ jobs:
         with:
           inlineScript: |
             echo "Reiniciando o App Service de Staging para aplicar todas as mudanças..."
-            az webapp restart --resource-group rg-micronectar-devops --name 'app-micronectar-staging'
+            az webapp restart --resource-group rg-micronectar-devops --name 'app-micronectar-staging-vs'
 
   deploy-production:
     runs-on: ubuntu-latest
