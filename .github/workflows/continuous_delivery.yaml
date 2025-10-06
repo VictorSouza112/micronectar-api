@@ -84,7 +84,7 @@ jobs:
         uses: azure/cli@v1
         with:
           inlineScript: |
-            az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-prod' --settings \
+            az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-prod-vs' --settings \
               "WEBSITES_CONTAINER_START_TIME_LIMIT=600" \
               "WEBSITES_PORT=8080" \
               "SPRING_PROFILES_ACTIVE=production" \
@@ -97,7 +97,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'app-micronectar-prod'
+          app-name: 'app-micronectar-prod-vs'
           images: '${{ secrets.DOCKERHUB_USERNAME }}/micronectar-api:${{ github.sha }}'
 
       - name: Restart Production App Service
@@ -105,4 +105,4 @@ jobs:
         with:
           inlineScript: |
             echo "Reiniciando o App Service de Produção para aplicar todas as mudanças..."
-            az webapp restart --resource-group rg-micronectar-devops --name 'app-micronectar-prod'
+            az webapp restart --resource-group rg-micronectar-devops --name 'app-micronectar-prod-vs'
