@@ -44,7 +44,7 @@ jobs:
         uses: azure/cli@v1
         with:
           inlineScript: |
-            az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-staging-vs' --settings \
+            az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-staging' --settings \
               "SPRING_PROFILES_ACTIVE=staging" \
               "DB_URL=${{ secrets.DB_URL_STAGING }}" \
               "DB_USERNAME=${{ secrets.DB_USERNAME_STAGING }}" \
@@ -75,7 +75,7 @@ jobs:
         uses: azure/cli@v1
         with:
           inlineScript: |
-            az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-prod-vs' --settings \
+            az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-prod' --settings \
               "SPRING_PROFILES_ACTIVE=production" \
               "DB_URL=${{ secrets.DB_URL_PROD }}" \
               "DB_USERNAME=${{ secrets.DB_USERNAME_PROD }}" \
