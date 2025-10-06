@@ -1,2 +1,2 @@
 # micronectar-api
-API para a plataforma Micronectar
+API para a plataforma Micronectar (teste CI)
