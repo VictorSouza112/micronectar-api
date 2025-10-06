@@ -3,11 +3,12 @@ name: Continuous Integration
 
 # Gatilhos (Triggers)
 on:
-  # Executa em pull requests abertos ou atualizados contra a branch 'main'
+  # Executa em pull requests abertos ou atualizados contra 'main' OU 'develop'
   pull_request:
     branches:
       - main
-  # Permite a execução manual do workflow a partir da aba Actions no GitHub
+      - develop
+  # Permite a execução manual do workflow
   workflow_dispatch:
 
 jobs:

@@ -38,14 +38,21 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        // Endpoints Públicos
+                        // --- NOVA REGRA DE PERMISSÃO ---
+                        // Permite acesso GET à raiz e ao index.html para qualquer um
+                        .requestMatchers(HttpMethod.GET, "/", "/index.html").permitAll()
+
+                        // Endpoints Públicos de Autenticação e Registro
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/register/**").permitAll()
-                        // Endpoint de Adicionar Produtos
+
+                        // Endpoint de Adicionar Produtos (Protegido)
                         .requestMatchers(HttpMethod.POST, "/api/microempreendedores/*/produtos").hasAnyRole("MICROEMPREENDEDOR", "ADMIN")
-                        // Endpoint de Listar Produtos
+
+                        // Endpoint de Listar Produtos (Protegido)
                         .requestMatchers(HttpMethod.GET, "/api/microempreendedores/*/produtos").authenticated()
-                        // Permite POST em /api/microempreendedores/{id}/votos apenas para CLIENTE, INVESTIDOR ou ADMIN
+
+                        // Endpoint de Votação (Protegido)
                         .requestMatchers(HttpMethod.POST, "/api/microempreendedores/*/votos").hasAnyRole("CLIENTE", "INVESTIDOR", "ADMIN")
 
                         // Regra Geral: Qualquer outra requisição exige autenticação
