@@ -23,7 +23,7 @@ jobs:
         # A imagem Docker do Oracle que será usada.
         image: gvenzl/oracle-xe:21-slim-faststart
         # Variáveis de ambiente para configurar o contêiner do Oracle.
-        environment:
+        env:
           ORACLE_PASSWORD: test_password
           APP_USER: test_user
           APP_USER_PASSWORD: test_user_password
