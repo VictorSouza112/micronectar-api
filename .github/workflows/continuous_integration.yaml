@@ -1,23 +1,67 @@
+# Nome do Workflow
 name: Continuous Integration
 
+# Gatilhos (Triggers)
 on:
-    pull_request:
-      branches:
-        - develop
-        - main
+  # Executa em pull requests abertos ou atualizados contra a branch 'main'
+  pull_request:
+    branches:
+      - main
+  # Permite a execução manual do workflow a partir da aba Actions no GitHub
+  workflow_dispatch:
 
 jobs:
-  test:
+  # Nome do Job
+  build-and-test:
+    # O tipo de runner que o job irá rodar
     runs-on: ubuntu-latest
+
+    # Bloco de Serviços: Inicia contêineres que ficam disponíveis para o job
+    services:
+      # Nome do serviço. Usaremos 'oracle-db' para clareza.
+      oracle-db:
+        # A imagem Docker do Oracle que será usada.
+        image: gvenzl/oracle-xe:21-slim-faststart
+        # Variáveis de ambiente para configurar o contêiner do Oracle.
+        environment:
+          ORACLE_PASSWORD: test_password
+          APP_USER: test_user
+          APP_USER_PASSWORD: test_user_password
+        # Mapeia a porta 1521 do contêiner para a porta 1521 do host (o runner).
+        # Isso torna o banco acessível via localhost:1521 dentro do job.
+        ports:
+          - 1521:1521
+        # Healthcheck robusto para garantir que o banco esteja 100% pronto.
+        # O GitHub Actions usa a sintaxe de 'options' para passar parâmetros do 'docker run'.
+        options: >-
+          --health-cmd "sqlplus -S system/test_password@//localhost:1521/XEPDB1 <<< \"select 1 from dual;\""
+          --health-interval 20s
+          --health-start-period 120s
+          --health-timeout 10s
+          --health-retries 10
+
     steps:
-      - name: Git Checkout
+      # 1. Checkout do código-fonte do repositório
+      - name: Checkout Code
         uses: actions/checkout@v4
 
+      # 2. Setup do JDK 21
       - name: Setup Java SDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
+          cache: 'maven' # Adiciona cache para as dependências do Maven, acelerando builds futuros
 
-      - name: Unit tests
-        run: mvn test
+      # 3. Execução dos Testes com Maven
+      - name: Run Unit and Integration Tests
+        # O comando 'mvn -B test' executa o ciclo de vida de teste do Maven.
+        # O '-B' é para o modo "batch", que evita logs interativos.
+        # As variáveis de ambiente aqui sobrescrevem os padrões do application.properties,
+        # fazendo a aplicação conectar-se ao banco de dados do contêiner de serviço.
+        run: mvn -B test
+        env:
+          DB_URL: jdbc:oracle:thin:@//localhost:1521/XEPDB1
+          DB_USERNAME: system
+          DB_PASSWORD: test_password
+          JWT_SECRET: jwt-secret-para-testes-de-ci
