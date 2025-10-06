@@ -45,6 +45,7 @@ jobs:
         with:
           inlineScript: |
             az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-staging' --settings \
+              "WEBSITES_PORT=8080"
               "SPRING_PROFILES_ACTIVE=staging" \
               "DB_URL=${{ secrets.DB_URL_STAGING }}" \
               "DB_USERNAME=${{ secrets.DB_USERNAME_STAGING }}" \
@@ -57,6 +58,13 @@ jobs:
         with:
           app-name: 'app-micronectar-staging'
           images: '${{ secrets.DOCKERHUB_USERNAME }}/micronectar-api:${{ github.sha }}'
+
+      - name: Restart Staging App Service
+        uses: azure/cli@v1
+        with:
+          inlineScript: |
+            echo "Reiniciando o App Service de Staging para aplicar todas as mudanças..."
+            az webapp restart --resource-group rg-micronectar-devops --name 'app-micronectar-staging-vs'
 
   deploy-production:
     runs-on: ubuntu-latest
@@ -76,6 +84,7 @@ jobs:
         with:
           inlineScript: |
             az webapp config appsettings set --resource-group rg-micronectar-devops --name 'app-micronectar-prod' --settings \
+              "WEBSITES_PORT=8080"
               "SPRING_PROFILES_ACTIVE=production" \
               "DB_URL=${{ secrets.DB_URL_PROD }}" \
               "DB_USERNAME=${{ secrets.DB_USERNAME_PROD }}" \
@@ -88,3 +97,10 @@ jobs:
         with:
           app-name: 'app-micronectar-prod'
           images: '${{ secrets.DOCKERHUB_USERNAME }}/micronectar-api:${{ github.sha }}'
+
+      - name: Restart Production App Service
+        uses: azure/cli@v1
+        with:
+          inlineScript: |
+            echo "Reiniciando o App Service de Produção para aplicar todas as mudanças..."
+            az webapp restart --resource-group rg-micronectar-devops --name 'app-micronectar-prod-vs'
