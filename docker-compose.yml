@@ -31,12 +31,12 @@ services:
       # Monta o volume nomeado para persistir os dados do banco.
       - db_data:/opt/oracle/oradata
     environment:
-      # Define a senha para o usuário 'micronectar_app'. DEVE ser a mesma usada pela API.
+      # Define a senha para o usuário 'system'. DEVE ser a mesma usada pela API.
       - ORACLE_PASSWORD=oracle
       - APP_USER=micronectar_app
       - APP_USER_PASSWORD=micronectar_pass
     healthcheck:
-      test: [ "CMD-SHELL", "sqlplus -S micronectar_app/micronectar_pass@//localhost:1521/XEPDB1 <<< \"select open_mode from v\\$$pdbs where name = 'XEPDB1';\" | grep -q 'READ WRITE'" ]
+      test: [ "CMD-SHELL", "sqlplus -S system/oracle@//localhost:1521/XEPDB1 <<< \"select open_mode from v\\$$pdbs where name = 'XEPDB1';\" | grep -q 'READ WRITE'" ]
       interval: 15s
       timeout: 10s
       retries: 10
