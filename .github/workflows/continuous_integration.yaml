@@ -35,7 +35,7 @@ jobs:
         # Healthcheck robusto para garantir que o banco esteja 100% pronto.
         # O GitHub Actions usa a sintaxe de 'options' para passar parâmetros do 'docker run'.
         options: >-
-          --health-cmd "sqlplus -S system/test_password@//localhost:1521/XEPDB1 <<< \"select 1 from dual;\""
+          --health-cmd "sqlplus -S micronectar_app/micronectar_pass@//localhost:1521/XEPDB1 <<< \"select 1 from dual;\""
           --health-interval 20s
           --health-start-period 120s
           --health-timeout 10s
@@ -63,6 +63,6 @@ jobs:
         run: mvn -B test
         env:
           DB_URL: jdbc:oracle:thin:@//localhost:1521/XEPDB1
-          DB_USERNAME: system
-          DB_PASSWORD: test_password
+          DB_USERNAME: micronectar_app
+          DB_PASSWORD: micronectar_pass
           JWT_SECRET: jwt-secret-para-testes-de-ci
