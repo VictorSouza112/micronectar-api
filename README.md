@@ -192,10 +192,10 @@ services:
 ## Prints do funcionamento
 
 ### Pipeline de CI com sucesso em um Pull Request
-<img width="1412" height="79" alt="image" src="https://github.com/user-attachments/assets/422345c6-5406-48ec-b839-3b2ba9360369" />
+<img width="1862" height="701" alt="image" src="https://github.com/user-attachments/assets/8366735d-01e0-4fce-ae93-7719a4ea2c6f" />
 
 ### Pipeline de CD com sucesso
-<img width="1405" height="192" alt="image" src="https://github.com/user-attachments/assets/eea5b3da-86e0-4bdb-89cc-533022939c5a" />
+<img width="1847" height="708" alt="image" src="https://github.com/user-attachments/assets/cf763a14-f200-40f7-bc4e-db897acaf4b7" />
 
 ### Imagem Docker publicada no Docker Hub com a tag do commit
 <img width="1903" height="764" alt="image" src="https://github.com/user-attachments/assets/cc411c72-30fb-4f39-a45e-050ed442353d" />
@@ -209,6 +209,7 @@ services:
 ### Teste de um endpoint protegido no Swagger UI (com token)
 #### Sem ter colocado um token válido no authorize
 <img width="1583" height="1057" alt="image" src="https://github.com/user-attachments/assets/156e7eef-efc5-4cb9-8204-ee748d76f4dd" />
+
 #### Após ter colocado um token válido
 <img width="1586" height="1034" alt="image" src="https://github.com/user-attachments/assets/76e8ac54-b4d0-4490-906f-6d78038d94d7" />
 
