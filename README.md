@@ -4,6 +4,18 @@ A `micronectar-api` é uma API RESTful desenvolvida em Java com Spring Boot, ser
 
 Esta documentação reflete um projeto maduro, com um ciclo de vida de desenvolvimento totalmente automatizado, desde os testes de integração até a implantação contínua em múltiplos ambientes na nuvem.
 
+## Acesso aos Ambientes
+
+A aplicação está implantada de forma contínua em dois ambientes distintos no Microsoft Azure, refletindo as branches principais do projeto.
+
+*   **Ambiente de Produção (branch `main`):**
+    *   **URL:** [https://app-micronectar-prod-vs-hefacxamcjgkgdgn.brazilsouth-01.azurewebsites.net](https://app-micronectar-prod-vs-hefacxamcjgkgdgn.brazilsouth-01.azurewebsites.net)
+
+*   **Ambiente de Staging (branch `develop`):**
+    *   **URL:** [https://app-micronectar-staging-vs-bwezgje4gpc2etag.brazilsouth-01.azurewebsites.net](https://app-micronectar-staging-vs-bwezgje4gpc2etag.brazilsouth-01.azurewebsites.net)
+
+> **Nota Importante:** As aplicações estão hospedadas em um plano que pode colocar os contêineres em modo de "hibernação" após períodos de inatividade. O **primeiro acesso a qualquer uma das URLs pode levar de 1 a 2 minutos** para ser concluído, enquanto a plataforma inicia o contêiner. Acessos subsequentes serão instantâneos.
+
 ## Como executar localmente com Docker
 
 O ambiente de desenvolvimento local é totalmente orquestrado com Docker, garantindo consistência e eliminando a necessidade de instalar manualmente um banco de dados ou um ambiente Java.
